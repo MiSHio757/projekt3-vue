@@ -1,9 +1,11 @@
-const mongoose = require("mongoose");
-const TransactionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  amount: { type: Number, required: true },
-  category: { type: String, required: true },
-  type: { type: String, enum: ["income", "expense"], required: true },
-  date: { type: Date, default: Date.now },
+const ProductSchema = new mongoose.Schema({
+  name: String,
+  brand: String,
+  type: String,
+  strength: String,
+  price: Number,
+  flavor: String,
+  image: String,
 });
-module.exports = mongoose.model("Transaction", TransactionSchema);
+
+const Product = mongoose.model("Product", ProductSchema);
