@@ -89,20 +89,20 @@ onBeforeUnmount(() => {
 /* Mega Dropdown */
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: 5rem;
   left: 0;
-  width: max-content;
+  width: 99.9%;
   height: 500px;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 200vh;
-  z-index: 1000;
+  z-index: 999999;
   display: none;
 }
 .dropdown-menu.show {
   display: block;
 }
+
 .dropdown-section {
   margin-right: 15px;
 }

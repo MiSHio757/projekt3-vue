@@ -4,8 +4,8 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 const items = ref([
   { img: '../img/herobaner.png', text: 'Xqs vitsnus ', price: '309kr - 10st' },
   { img: '../img/herobaner1.jpg', text: 'Zyn vitsnus', price: '250kr - 10st' },
-  { img: '../img/herobaner2.png', text: 'Ännu bättre ' },
-  { img: '../img/herobaner3.jpg', text: 'GOAT Snus' },
+  { img: '../img/herobaner2.png', text: 'X whiteportion', price: '230kr - 10st' },
+  { img: '../img/herobaner3.jpg', text: 'GOAT Snus', price: '299kr - 10st' },
 ])
 
 const currentIndex = ref(0)
@@ -31,7 +31,9 @@ onMounted(() => {
     >
       <img :src="item.img" :alt="'Hero Banner' + index" />
       <div class="text-overlay">
-        <p>{{ item.text }}</p>
+        <p>
+          {{ item.text }} <span class="price">{{ item.price }}</span>
+        </p>
         <button>Köp</button>
       </div>
     </div>
@@ -47,6 +49,7 @@ onMounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  z-index: 0;
 }
 
 .hero-banner .img-container {
@@ -74,27 +77,28 @@ onMounted(() => {
 
 .text-overlay {
   position: absolute;
+  display: flex;
+  flex-direction: row;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 50x;
-  padding: 10px;
+  padding: 10px 0;
   background-color: #0569ccfa;
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   z-index: 3;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
   align-items: center;
 }
 
 .text-overlay p {
-  margin: 0;
+  width: auto;
   font-size: 25px;
-  flex-grow: 1;
-  margin-left: 200px;
   font-weight: bold;
+  margin-right: 1rem;
 }
 
 .text-overlay button {
@@ -105,10 +109,13 @@ onMounted(() => {
   border-radius: 5px;
   cursor: pointer;
   font-family: Arial, Helvetica, sans-serif;
-  margin-right: 500px;
 }
 
 .text-overlay button:hover {
   background-color: #ff4500;
+}
+
+.price {
+  color: white;
 }
 </style>
