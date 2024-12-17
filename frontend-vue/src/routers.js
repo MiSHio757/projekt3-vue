@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from './components/HomePage.vue'
 import Kundservice from './components/KundserviceComponent.vue'
 import SnusILaget from './components/SnusILagetComponent.vue'
+import Login from './components/LoginComponent.vue'
 
 const routes = [
   {
@@ -21,8 +22,9 @@ const routes = [
   },
 
   {
-    path: '/loginpage',
+    path: '/login',
     name: 'Login',
+    component: Login,
   },
 ]
 

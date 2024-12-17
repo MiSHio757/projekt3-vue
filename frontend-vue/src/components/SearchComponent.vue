@@ -57,7 +57,7 @@ const onIconClick = () => {
 }
 
 .search-input {
-  width: 50rem;
+  width: 40rem;
   padding: 0.5rem;
   font-size: 15px;
   border-radius: 20px;

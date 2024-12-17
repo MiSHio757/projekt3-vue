@@ -69,7 +69,7 @@ onMounted(() => {
 }
 
 .hero-banner img {
-  object-fit: cover; /* Obrazki będą wypełniać kontener, zachowując proporcje */
+  object-fit: cover;
   width: 100%;
   height: 100%;
   border-radius: 20px;
@@ -82,7 +82,7 @@ onMounted(() => {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50x;
+  height: 50px;
   padding: 10px 0;
   background-color: #0569ccfa;
   color: black;
