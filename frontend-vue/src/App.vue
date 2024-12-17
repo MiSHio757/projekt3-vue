@@ -1,6 +1,14 @@
 <script setup>
 import DropdownButton from './components/DropdownButton.vue'
 import SearchComponent from './components/SearchComponent.vue'
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToLogin = () => {
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -13,12 +21,15 @@ import SearchComponent from './components/SearchComponent.vue'
         <router-link to="/" class="logo">
           <img src="../img/logo.png" alt="Snusjakt-logo" />
           <h1>Snusjakt</h1>
+          <div class="symbol-18">
+            <img src="../img/18.png" alt="18plus" />
+          </div>
         </router-link>
         <SearchComponent />
         <div class="header-info">
           <router-link to="/kundservice">Kundservice</router-link>
           <router-link to="/snus-i-laget">Snus i Laget</router-link>
-          <button class="loggin-button">Logga in</button>
+          <button class="loggin-button" @click="goToLogin">Logga in</button>
         </div>
       </div>
       <div class="under-header">
