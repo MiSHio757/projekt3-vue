@@ -26,6 +26,7 @@ const goToLogin = () => {
           </div>
         </router-link>
         <SearchComponent />
+
         <div class="header-info">
           <router-link to="/kundservice">Kundservice</router-link>
           <router-link to="/snus-i-laget">Snus i Laget</router-link>

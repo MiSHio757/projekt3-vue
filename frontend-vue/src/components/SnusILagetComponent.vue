@@ -1,38 +1,55 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import HeroBanner from './HeroBanner.vue'
+import productsJson from '../../../backend-node/database.json'
+import { useRoute } from 'vue-router'
 
-// Normalize the images array with a structure
-const images = ref([
-  { img: '../img/snusILaget/snus1.jpg', text: 'Snus 1' },
-  { img: '../img/snusILaget/snus2.jpg', text: 'Snus 2' },
-  { img: '../img/snusILaget/snus3.jpg', text: 'Snus 3' },
-  { img: '../img/snusILaget/snus4.jpg', text: 'Snus 4' },
-  { img: '../img/snusILaget/snus5.jpg', text: 'Snus 5' },
-  { img: '../img/snusILaget/snus6.jpg', text: 'Snus 6' },
-  { img: '../img/snusILaget/snus7.jpg', text: 'Snus 7' },
-  { img: '../img/snusILaget/snus8.jpg', text: 'Snus 8' },
-  { img: '../img/snusILaget/snus9.jpg', text: 'Snus 9' },
-  { img: '../img/snusILaget/snus10.jpg', text: 'Snus 10' },
-  { img: '../img/snusILaget/snus11.jpg', text: 'Snus 11' },
-  { img: '../img/snusILaget/snus12.jpg', text: 'Snus 12' },
-  { img: '../img/snusILaget/snus13.jpg', text: 'Snus 13' },
-  { img: '../img/snusILaget/snus14.jpg', text: 'Snus 14' },
-  { img: '../img/snusILaget/snus15.jpg', text: 'Snus 15' },
-  { img: '../img/snusILaget/snus16.jpg', text: 'Snus 16' },
-  { img: '../img/snusILaget/snus17.jpg', text: 'Snus 17' },
-  { img: '../img/snusILaget/snus18.jpg', text: 'Snus 18' },
-  { img: '../img/snusILaget/snus19.jpg', text: 'Snus 19' },
-  { img: '../img/snusILaget/snus20.jpg', text: 'Snus 20' },
-  { img: '../img/snusILaget/snus21.jpg', text: 'Snus 21' },
-  { img: '../img/snusILaget/snus22.jpg', text: 'Snus 22' },
-  { img: '../img/snusILaget/snus23.jpg', text: 'Snus 23' },
-  { img: '../img/snusILaget/snus24.jpg', text: 'Snus 24' },
-  { img: '../img/snusILaget/snus25.jpg', text: 'Snus 25' },
-  { img: '../img/snusILaget/snus26.jpg', text: 'Snus 26' },
-  { img: '../img/snusILaget/snus27.jpg', text: 'Snus 27' },
-  { img: '../img/snusILaget/snus28.jpg', text: 'Snus 28' },
-])
+const products = ref(productsJson)
+
+const route = useRoute()
+const filtertype = ref(route.query.category || 'All')
+const sortBy = ref('None')
+
+const filteredProducts = computed(() => {
+  return filtertype.value === 'All'
+    ? products.value
+    : products.value.filter((product) => product.type === filtertype.value)
+})
+
+const sortedProducts = computed(() => {
+  let result = [...filteredProducts.value]
+  if (sortBy.value === 'popularitet') {
+    result.sort((a, b) => b.popularity - a.popularity)
+  } else if (sortBy.value === 'omdöme') {
+    result.sort((a, b) => b.rating - a.rating)
+  } else if (sortBy.value === 'pris') {
+    result.sort((a, b) => b.price - a.price)
+  }
+  return result
+})
+
+const categories = ref(['All', ...new Set(products.value.map((item) => item.type))])
+
+function getStars(rating) {
+  const filledStars = Math.floor(rating)
+  const hasHalfStar = rating % 1 >= 0.5
+  const totalStars = 5
+  return {
+    filled: filledStars,
+    half: hasHalfStar,
+    empty: totalStars - filledStars - (hasHalfStar ? 1 : 0),
+  }
+}
+const headerText = computed(() => {
+  if (filtertype.value === 'All') {
+    return 'Utforska Vårt Sortiment'
+  } else {
+    return `Produkter inom ${filtertype.value}`
+  }
+})
+watchEffect(() => {
+  filtertype.value = route.query.category || 'All'
+})
 </script>
 
 <template>
@@ -45,33 +62,68 @@ const images = ref([
       </p>
     </header>
 
+    <!-- Filter- och sorteringssektion -->
+
     <main class="content">
       <HeroBanner />
-
-      <!-- Benefits Section -->
-      <section class="benefits">
-        <div class="benefits-grid">
-          <div class="benefit">
-            <img src="../../img/delivery.png" alt="Snabba leveranser" />
-            <h3>Snabba leveranser</h3>
-            <p>Vi levererar dina beställningar inom 1–3 arbetsdagar.</p>
+      <section class="filter-sort-section">
+        <div class="controls">
+          <!-- Filtersektion -->
+          <div class="filter">
+            <label for="typeFilter">Filtera efter kategori:</label>
+            <select id="typeFilter" v-model="filtertype">
+              <option v-for="type in categories" :key="type" :value="type">
+                {{ type }}
+              </option>
+            </select>
           </div>
-          <div class="benefit">
-            <img class="free" src="../../img/frifrakt.png" alt="Fri frakt" />
-            <h3>Fri frakt</h3>
-            <p>Njut av fri frakt på alla beställningar över 200 kr.</p>
+
+          <!-- Sorteringssektion -->
+          <div class="sort">
+            <label for="sortSelect">Sortera efter:</label>
+            <select id="sortSelect" v-model="sortBy">
+              <option value="None">Ingen sortering</option>
+              <option value="popularitet">Popularitet</option>
+              <option value="omdöme">Omdöme</option>
+              <option value="pris">Pris</option>
+            </select>
           </div>
         </div>
       </section>
-
-      <!-- Image Grid Section -->
+      <!-- Grid Sektion -->
       <section class="image-grid-section">
-        <h2>Utforska Vårt Sortiment</h2>
+        <h2>{{ headerText }}</h2>
         <div class="image-grid">
-          <div class="image-card" v-for="(item, index) in images" :key="index">
-            <img :src="item.img" />
-            <p>{{ item.text }}</p>
-          </div>
+          <router-link
+            v-for="(item, index) in sortedProducts"
+            :key="index"
+            :to="`/snus/${item.id}`"
+            class="image-card"
+          >
+            <img :src="item.img" alt="Produktbild" />
+            <p>
+              <strong>{{ item.name }}</strong>
+            </p>
+            <!-- Omdöme: Stjärnor + numeriskt omdöme -->
+            <p class="price">{{ item.price }} kr</p>
+            <div class="stars">
+              <span
+                v-for="n in getStars(item.rating).filled"
+                :key="'filled' + n"
+                class="star filled"
+                >★</span
+              >
+              <span v-if="getStars(item.rating).half" class="star half">★</span>
+              <span v-for="n in getStars(item.rating).empty" :key="'empty' + n" class="star"
+                >☆</span
+              >
+              <span class="rating-number">{{ item.rating.toFixed(1) }}</span>
+            </div>
+            <p class="popularity">
+              Popularitet: {{ item.popularity }}
+              <span class="per-day">per day</span>
+            </p>
+          </router-link>
         </div>
       </section>
     </main>
@@ -79,7 +131,7 @@ const images = ref([
 </template>
 
 <style scoped>
-/* Bas-styling */
+/* Grundstilar */
 .snus-i-laget {
   padding: 2rem;
   font-family: Arial, sans-serif;
@@ -87,6 +139,7 @@ const images = ref([
   color: #333;
 }
 
+/* Header */
 .header {
   text-align: center;
   margin-bottom: 2rem;
@@ -102,44 +155,39 @@ const images = ref([
   margin-top: 1rem;
 }
 
-.benefits {
-  margin-bottom: 3rem;
-}
-
-.benefits-grid {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.benefit {
-  flex: 1 1 calc(33.333% - 2rem);
-  background-color: #5aa3f6;
-  border: 0.1rem solid #ddd;
-  border-radius: 0.5rem;
+/* Filter & Sorteringssektion */
+.filter-sort-section {
+  margin: 2rem 0;
   text-align: center;
-  padding: 1.5rem;
-  box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
 }
 
-.benefit img {
-  width: 100%;
-  max-width: 10rem;
-  height: auto;
-  margin-bottom: 1rem;
+.controls {
+  display: flex;
+  justify-content: space-around;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.benefit h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: white;
+.filter,
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.benefit p {
+.filter label,
+.sort label {
   font-size: 1rem;
 }
-/* Image Grid Section */
+
+select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Grid Layout */
 .image-grid-section {
   margin-bottom: 3rem;
 }
@@ -159,13 +207,18 @@ const images = ref([
 }
 
 .image-card {
-  flex: 1 1 calc(25% - 1.5rem); /* 4 images per row */ /* 8 images per row */
+  flex: 1 1 calc(25% - 1.5rem);
   background-color: #fff;
   border: 0.1rem solid #ddd;
   border-radius: 0.5rem;
   text-align: center;
   padding: 1rem;
   box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.image-card:hover {
+  transform: scale(1.05);
 }
 
 .image-card img {
@@ -177,70 +230,64 @@ const images = ref([
 
 .image-card p {
   font-size: 0.9rem;
+  color: #555;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 0.5rem 0;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #d3d3d3;
+}
+
+.star.filled {
+  color: #ffa500;
+}
+
+.star.half {
+  background: linear-gradient(to right, #ffa500 50%, #d3d3d3 50%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.rating-number {
+  font-size: 1rem;
   color: #333;
+  margin-left: 8px;
   font-weight: bold;
 }
 
-.bulk-orders {
-  margin-bottom: 3rem;
-}
-
-.bulk-orders h2 {
-  font-size: 2rem;
-  color: #ff6600;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.bulk-grid {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.bulk-grid img {
-  flex: 1 1 50%;
-  max-width: 20rem;
-  height: auto;
-  border-radius: 0.5rem;
-}
-
-.bulk-text {
-  flex: 1 1 50%;
-}
-
-.bulk-text p {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-.cta-button {
-  background-color: #0056b3;
-  color: white;
-  padding: 0.8rem 1.5rem;
+.price {
   font-size: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #ff6600;
+  margin: 0.5rem 0;
+  font-weight: bold;
 }
 
-.cta-button:hover {
-  background-color: #ff6600;
+.popularity {
+  font-size: 1rem;
+  color: #ff6600;
+  margin: 0.5rem 0;
+  font-weight: bold;
 }
 
-@media (max-width: 768px) {
-  .benefit {
-    flex: 1 1 100%;
-  }
-
-  .bulk-grid {
-    flex-direction: column;
-  }
-
-  .bulk-grid img {
-    max-width: 100%;
-  }
+.per-day {
+  font-size: 0.9rem;
+  color: #555;
+  margin-left: 0.3rem;
+  font-weight: normal;
 }
 </style>

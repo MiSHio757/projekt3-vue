@@ -176,12 +176,4 @@ import {} from 'vue'
   font-size: 1rem;
   color: #555;
 }
-
-/* Responsiv design */
-@media (max-width: 768px) {
-  .faq-item,
-  .contact-option {
-    flex: 1 1 100%;
-  }
-}
 </style>

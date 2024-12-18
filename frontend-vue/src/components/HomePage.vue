@@ -19,29 +19,43 @@ import SnusComponets from './SnusComponents.vue'
             <div class="hero-text">
               <h2>Hitta ditt favorit snus till bästa pris!</h2>
               <p>Upptäck erbjudanden och kampanjer på dina favoriter.</p>
-              <button class="cta-button">Utforska nu</button>
+              <a :href="`/snus-i-laget`">
+                <button class="cta-button">Utforska nu</button>
+              </a>
             </div>
             <div class="popular-categories">
               <h2>Populära-Kategorier</h2>
               <div class="button-categories-container">
                 <div class="categories-snus">
-                  <a href="#">Vittsnus</a>
+                  <router-link :to="{ path: '/snus-i-laget', query: { category: 'Vittsnus' } }">
+                    Vittsnus
+                  </router-link>
                   <img class="snus-image" src="../../img/vitsnus.jpg" />
                 </div>
+
                 <div class="categories-snus">
-                  <a href="#">Lössnus</a>
+                  <router-link :to="{ path: '/snus-i-laget', query: { category: 'Lössnus' } }">
+                    Lössnus
+                  </router-link>
                   <img class="snus-image" src="../../img/lössnus.jpg" />
                 </div>
+
                 <div class="categories-snus">
-                  <a href="#">Portionsnus</a>
+                  <router-link :to="{ path: '/snus-i-laget', query: { category: 'Portionsnus' } }">
+                    Portionsnus
+                  </router-link>
                   <img class="snus-image" src="../../img/portionsnus.jpg" />
                 </div>
+
                 <div class="categories-snus">
-                  <a href="#">Whiteportion</a>
+                  <router-link :to="{ path: '/snus-i-laget', query: { category: 'Whiteportion' } }">
+                    Whiteportion
+                  </router-link>
                   <img class="snus-image" src="../../img/whiteportion.jpg" />
                 </div>
+
                 <div class="categories-snus">
-                  <a href="#">Alla produkter</a>
+                  <a :href="`/snus-i-laget`">Alla produkter</a>
                   <img class="snus-image" src="../../img/allaprodukter.webp" />
                 </div>
               </div>

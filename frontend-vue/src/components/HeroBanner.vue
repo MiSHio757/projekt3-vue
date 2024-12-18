@@ -2,10 +2,28 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const items = ref([
-  { img: '../img/herobaner.png', text: 'Xqs vitsnus ', price: '309kr - 10st' },
-  { img: '../img/herobaner1.jpg', text: 'Zyn vitsnus', price: '250kr - 10st' },
-  { img: '../img/herobaner2.png', text: 'X whiteportion', price: '230kr - 10st' },
-  { img: '../img/herobaner3.jpg', text: 'GOAT Snus', price: '299kr - 10st' },
+  {
+    id: 1,
+    img: '../img/herobaner.png',
+    text: 'Xqs vitsnus ',
+    price: '309kr - 10st',
+    navigateId: 36,
+  },
+  {
+    id: 2,
+    img: '../img/herobaner1.jpg',
+    text: 'Zyn vitsnus',
+    price: '250kr - 10st',
+    navigateId: 35,
+  },
+  {
+    id: 3,
+    img: '../img/herobaner2.png',
+    text: 'X whiteportion',
+    price: '230kr - 10st',
+    navigateId: 34,
+  },
+  { id: 4, img: '../img/herobaner3.jpg', text: 'GOAT Snus', price: '299kr - 10st', navigateId: 33 },
 ])
 
 const currentIndex = ref(0)
@@ -34,7 +52,9 @@ onMounted(() => {
         <p>
           {{ item.text }} <span class="price">{{ item.price }}</span>
         </p>
-        <button>Köp</button>
+        <router-link :to="{ path: `snus/${item.navigateId}` }">
+          <button>Köp</button>
+        </router-link>
       </div>
     </div>
   </section>

@@ -3,6 +3,7 @@ import Home from './components/HomePage.vue'
 import Kundservice from './components/KundserviceComponent.vue'
 import SnusILaget from './components/SnusILagetComponent.vue'
 import Login from './components/LoginComponent.vue'
+import SnusDetails from './components/SnusDetails.vue'
 
 const routes = [
   {
@@ -25,6 +26,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/snus/:id',
+    name: 'SnusDetails',
+    component: SnusDetails,
+    props: true,
   },
 ]
 
